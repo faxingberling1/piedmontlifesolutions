@@ -1,0 +1,274 @@
+.wizard-container {
+  animation: fadeDown 0.5s ease-out;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(28, 43, 76, 0.1);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: var(--color-secondary);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.step-indicator {
+  text-align: right;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.step-content {
+  animation: slideRight 0.4s ease-out;
+}
+
+.step-title {
+  font-family: var(--font-heading);
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(28, 43, 76, 0.1);
+  padding-bottom: 0.5rem;
+}
+
+.step-subtitle {
+  color: var(--color-text-light);
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* Grid Layouts for form fields */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  color: var(--color-primary);
+  border: 1px solid rgba(28, 43, 76, 0.15);
+  border-radius: 8px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  resize: vertical;
+}
+
+textarea:focus {
+  border-color: var(--color-secondary);
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(212, 181, 83, 0.2);
+}
+
+/* Immersive Input Fields (Floating Labels) */
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border: none;
+  border-bottom: 2px solid rgba(28, 43, 76, 0.15);
+  outline: none;
+  background: transparent;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+}
+
+.input-group label {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+  pointer-events: none;
+  transition: 0.3s ease all;
+  font-family: var(--font-body);
+}
+
+.input-group input:focus ~ label,
+.input-group input:not(:placeholder-shown) ~ label,
+.input-group .active-label {
+  top: -20px;
+  font-size: 0.85rem;
+  color: var(--color-secondary);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.input-group input:focus {
+  border-bottom: 2px solid var(--color-secondary);
+}
+
+.input-group textarea + label {
+  top: -20px;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
+.input-group textarea:focus + label,
+.input-group textarea:not(:placeholder-shown) + label {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+/* Checkbox Grid for Symptoms */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.checkbox-label:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.checkbox-label input {
+  margin-top: 4px;
+  margin-right: 10px;
+  accent-color: var(--color-primary);
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-text {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  line-height: 1.4;
+}
+
+/* Consents Box */
+.consent-box {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(28, 43, 76, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.consent-box h4 {
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.consent-box p {
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: 1.5rem;
+}
+
+.sigCanvas {
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+.btn-clear {
+  background: transparent;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 0.8rem;
+  margin-top: 5px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-clear:hover {
+  color: var(--color-primary);
+}
+
+/* Wizard Buttons */
+.wizard-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(28, 43, 76, 0.1);
+}
+
+.btn-secondary {
+  background: rgba(28, 43, 76, 0.05);
+  color: var(--color-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clinic-footer {
+  flex: 2;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.btn-secondary:hover {
+  background: rgba(28, 43, 76, 0.1);
+}
+
+.btn-primary-small {
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-left: auto; /* Push to right if no Back button */
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(28, 43, 76, 0.15);
+}
+
+.btn-primary-small:hover {
+  background: #121d33;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(28, 43, 76, 0.2);
+}
+
+.submit-btn {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
