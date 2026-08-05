@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FileText, Shield, Video } from 'lucide-react'
+import { FileText, Shield, Video, Home } from 'lucide-react'
 import IntakeFormWizard from './components/IntakeForm/IntakeFormWizard'
 import InsuranceForm from './components/InsuranceForm/InsuranceForm'
 import TelehealthForm from './components/TelehealthForm/TelehealthForm'
@@ -62,6 +62,13 @@ function App() {
             </div>
           ))}
         </nav>
+
+        <div className="sidebar-footer">
+          <a href="https://piedmontlifesolutions.com" className="sidebar-home-btn">
+            <Home size={18} />
+            <span>Return to Homepage</span>
+          </a>
+        </div>
       </aside>
 
       {/* Main Form Content */}
