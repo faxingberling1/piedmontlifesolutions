@@ -42,19 +42,51 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
 .modal-btn-cancel {
-  padding: 0.6rem 1.2rem;
-  font-weight: 500;
-  border-radius: 8px;
+  background: #f4f5f7;
+  color: var(--color-primary);
+  border: none;
+  padding: 0.75rem 1.75rem;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+}
+
+.modal-btn-cancel:hover {
+  background: var(--color-secondary);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(184, 144, 83, 0.3);
 }
 
 .modal-btn-confirm {
-  padding: 0.6rem 1.2rem;
+  background: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 2rem;
   font-weight: 600;
-  border-radius: 8px;
-  min-width: 120px;
+  border-radius: 30px;
+  cursor: pointer;
+  min-width: 150px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(28, 43, 76, 0.2);
+}
+
+.modal-btn-confirm:hover {
+  background: var(--color-secondary);
+  box-shadow: 0 6px 16px rgba(184, 144, 83, 0.4);
+  transform: translateY(-2px);
+}
+
+.modal-btn-confirm:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(184, 144, 83, 0.3);
 }
 
 @keyframes modalFadeIn {

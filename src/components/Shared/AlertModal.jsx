@@ -1,9 +1,10 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 const AlertModal = ({ isOpen, onClose, title, message }) => {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay">
       <div className="modal-container alert-modal-container">
         <h2 className="modal-title">{title || "Notice"}</h2>
@@ -18,7 +19,8 @@ const AlertModal = ({ isOpen, onClose, title, message }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

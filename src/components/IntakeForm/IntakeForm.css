@@ -2,29 +2,71 @@
   animation: fadeDown 0.5s ease-out;
 }
 
-.progress-bar-container {
-  width: 100%;
-  height: 6px;
-  background-color: rgba(28, 43, 76, 0.1);
-  border-radius: 10px;
-  margin-bottom: 1rem;
-  overflow: hidden;
+/* Stepper Layout */
+.stepper-container {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-top: 10px;
 }
 
-.progress-bar-fill {
+.stepper-track {
+  position: absolute;
+  top: 25px; /* center of the 30px circles */
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(28, 43, 76, 0.1);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.stepper-fill {
   height: 100%;
   background-color: var(--color-secondary);
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.step-indicator {
-  text-align: right;
-  font-size: 0.85rem;
-  font-weight: 600;
+.stepper-steps {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+}
+
+.step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2px solid rgba(28, 43, 76, 0.1);
   color: var(--color-text-light);
-  margin-bottom: 2rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  padding: 0;
+}
+
+.step-circle:hover {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.step-circle.active {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.step-circle.completed {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #ffffff;
 }
 
 .step-content {
@@ -41,9 +83,10 @@
 }
 
 .step-subtitle {
-  color: var(--color-text-light);
+  color: var(--color-primary);
   margin-bottom: 1.5rem;
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
 /* Grid Layouts for form fields */
@@ -129,16 +172,19 @@ textarea:focus {
   border-bottom: 2px solid var(--color-secondary);
 }
 
-.input-group textarea + label {
-  top: -20px;
-  font-size: 0.85rem;
-  color: var(--color-text-light);
+/* Textarea layout */
+.textarea-group {
+  margin-bottom: 1.5rem;
+  margin-top: 1.5rem;
+  width: 100%;
 }
 
-.input-group textarea:focus + label,
-.input-group textarea:not(:placeholder-shown) + label {
-  color: var(--color-secondary);
+.question-label {
+  display: block;
+  font-size: 1.05rem;
   font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.75rem;
 }
 
 /* Checkbox Grid for Symptoms */

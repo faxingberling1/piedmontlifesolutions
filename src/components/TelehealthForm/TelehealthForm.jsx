@@ -16,7 +16,9 @@ const TelehealthForm = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [alertState, setAlertState] = useState({ isOpen: false, title: '', message: '' });
+  const [formError, setFormError] = useState('');
 
   const showAlert = (title, message) => setAlertState({ isOpen: true, title, message });
   const closeAlert = () => setAlertState({ isOpen: false, title: '', message: '' });
@@ -48,6 +50,7 @@ const TelehealthForm = () => {
   };
 
   const handleSignatureEnd = () => {
+    setFormError('');
     if (sigPadRef.current && !sigPadRef.current.isEmpty()) {
       setFormData(prev => ({
         ...prev,
@@ -74,8 +77,9 @@ const TelehealthForm = () => {
   };
 
   const handleFinalSubmit = () => {
+    setFormError('');
     if (!formData.signatureData) {
-      showAlert("Missing Signature", "Please provide your digital signature before submitting.");
+      setFormError("Missing Signature: Please provide your Patient signature before submitting.");
       return;
     }
     setIsModalOpen(true);
@@ -103,12 +107,13 @@ const TelehealthForm = () => {
             'YOUR_PUBLIC_KEY'
           );
           setIsSubmitting(false);
-          showAlert("Success", "Telehealth Consent successfully submitted and emailed to the clinic!");
           setIsModalOpen(false);
+          setIsSubmitted(true);
         } catch (error) {
           setIsSubmitting(false);
-          showAlert("Submission Pending", "Note: The form was finalized, but EmailJS keys are not configured yet. Check the console for details.");
           setIsModalOpen(false);
+          setIsSubmitted(true);
+          console.error("EmailJS Error:", error);
         } finally {
           setIsSubmitting(false);
         }
@@ -120,9 +125,37 @@ const TelehealthForm = () => {
     }
   };
 
+  if (isSubmitted) {
+    return (
+      <div className="wizard-container" style={{ textAlign: 'center', padding: '5rem 2rem' }}>
+        <div style={{ color: 'var(--color-secondary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2 style={{ color: 'var(--color-primary)', fontSize: '2.5rem', marginBottom: '1rem' }}>Thank You!</h2>
+        <p style={{ color: 'var(--color-text-light)', fontSize: '1.1rem', marginBottom: '3rem', lineHeight: '1.6' }}>
+          Your Telehealth Consent Form has been successfully submitted and securely sent to our clinic.<br/>
+          We will review your information and be in touch shortly.
+        </p>
+        <button 
+          className="btn-primary" 
+          onClick={() => window.location.reload()} 
+          style={{ padding: '0.75rem 2.5rem', borderRadius: '30px', fontWeight: '600', cursor: 'pointer', fontSize: '1rem', border: 'none', background: 'var(--color-primary)', color: 'white', transition: 'all 0.3s ease' }}
+          onMouseOver={(e) => { e.target.style.background = 'var(--color-secondary)'; e.target.style.transform = 'translateY(-2px)'; e.target.style.boxShadow = '0 6px 16px rgba(184, 144, 83, 0.4)'; }}
+          onMouseOut={(e) => { e.target.style.background = 'var(--color-primary)'; e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = 'none'; }}
+        >
+          Return to Forms
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="wizard-container">
-      <form onSubmit={(e) => e.preventDefault()}>
+    <>
+      <div className="wizard-container">
+        <form onSubmit={(e) => e.preventDefault()}>
         <div className="step-content">
           <div className="input-group" style={{ marginBottom: '2rem' }}>
             <input type="text" name="clientName" placeholder=" " value={formData.clientName || ''} onChange={handleChange} required />
@@ -278,34 +311,54 @@ const TelehealthForm = () => {
               Moniquec@piedmontlifesolutions.com
             </div>
             
-            <div style={{ flex: 1, textAlign: 'right', display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
-              <button type="button" className="btn-secondary" onClick={handlePreviewPDF}>
-                Preview PDF
-              </button>
-              <button type="button" className="btn-primary-small submit-btn" onClick={handleFinalSubmit}>
-                Submit Form
-              </button>
+            <div style={{ flex: 1, textAlign: 'right', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-end' }}>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button type="button" className="btn-secondary" onClick={handlePreviewPDF}>
+                  Preview PDF
+                </button>
+                <button type="button" className="btn-primary-small submit-btn" onClick={handleFinalSubmit}>
+                  Submit Form
+                </button>
+              </div>
+              {formError && (
+                <div style={{ 
+                  color: '#d32f2f', 
+                  backgroundColor: '#fdecea', 
+                  padding: '0.75rem 1rem', 
+                  borderRadius: '8px', 
+                  fontSize: '0.85rem', 
+                  border: '1px solid #d32f2f', 
+                  maxWidth: '400px', 
+                  textAlign: 'left',
+                  animation: 'fadeDown 0.3s ease'
+                }}>
+                  <strong>Error: </strong>{formError}
+                </div>
+              )}
             </div>
           </div>
 
         </div>
       </form>
-
-      <ConfirmationModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onConfirm={confirmSubmission} 
-        isLoading={isSubmitting}
-        title="Submit Telehealth Consent"
-        message="Are you sure you want to submit your Telehealth Consent Form? Please ensure all information is accurate and you have reviewed the PDF preview."
-      />
-      <AlertModal 
-        isOpen={alertState.isOpen}
-        title={alertState.title}
-        message={alertState.message}
-        onClose={closeAlert}
-      />
     </div>
+
+    <ConfirmationModal 
+      isOpen={isModalOpen} 
+      onClose={() => setIsModalOpen(false)} 
+      onConfirm={confirmSubmission} 
+      isLoading={isSubmitting}
+      title="Submit Telehealth Consent"
+      message="Are you sure you want to submit your Telehealth Consent Form? Please ensure all information is accurate and you have reviewed the PDF preview."
+      cancelText="Review Form"
+      confirmText="Confirm to Submit"
+    />
+    <AlertModal 
+      isOpen={alertState.isOpen}
+      title={alertState.title}
+      message={alertState.message}
+      onClose={closeAlert}
+    />
+  </>
   );
 };
 

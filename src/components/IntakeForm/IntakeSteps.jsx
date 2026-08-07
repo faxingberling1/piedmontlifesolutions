@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 
 export const ClientInfo = ({ formData, handleChange }) => (
@@ -88,8 +88,8 @@ export const ClientInfo = ({ formData, handleChange }) => (
     </div>
 
     <div className="form-grid" style={{ alignItems: 'center', marginBottom: '1.5rem' }}>
-      <p style={{ color: 'var(--color-text)' }}>May I leave a message?</p>
-      <div style={{ display: 'flex', gap: '1rem' }}>
+      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <p style={{ color: 'var(--color-primary)', fontWeight: '600', margin: 0 }}>May I leave a message?</p>
         <label className="checkbox-label"><input type="radio" name="leaveMessage" value="Yes" checked={formData.leaveMessage === 'Yes'} onChange={handleChange} /><span className="checkbox-text">YES</span></label>
         <label className="checkbox-label"><input type="radio" name="leaveMessage" value="No" checked={formData.leaveMessage === 'No'} onChange={handleChange} /><span className="checkbox-text">NO</span></label>
       </div>
@@ -122,7 +122,7 @@ export const ClientInfo = ({ formData, handleChange }) => (
         <label>Name of person who referred you (optional)</label>
       </div>
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <p style={{ color: 'var(--color-text)' }}>May we thank them?</p>
+        <p style={{ color: 'var(--color-primary)', fontWeight: '600', margin: 0 }}>May we thank them?</p>
         <label className="checkbox-label"><input type="radio" name="thankReferral" value="Yes" checked={formData.thankReferral === 'Yes'} onChange={handleChange} /><span className="checkbox-text">YES</span></label>
         <label className="checkbox-label"><input type="radio" name="thankReferral" value="No" checked={formData.thankReferral === 'No'} onChange={handleChange} /><span className="checkbox-text">NO</span></label>
       </div>
@@ -133,13 +133,13 @@ export const ClientInfo = ({ formData, handleChange }) => (
 export const ClinicalInfo = ({ formData, handleChange }) => (
   <div className="step-content">
     <h3 className="step-title">Clinical Information</h3>
-    <div className="input-group full-width">
-      <textarea name="currentProblem" placeholder=" " value={formData.currentProblem || ''} onChange={handleChange} required rows={3}></textarea>
-      <label>Briefly state the nature of current problem(s) and why you are seeking treatment now:</label>
+    <div className="textarea-group full-width">
+      <label className="question-label">Briefly state the nature of current problem(s) and why you are seeking treatment now:</label>
+      <textarea name="currentProblem" value={formData.currentProblem || ''} onChange={handleChange} required rows={3}></textarea>
     </div>
-    <div className="input-group full-width">
-      <textarea name="therapyGoals" placeholder=" " value={formData.therapyGoals || ''} onChange={handleChange} required rows={3}></textarea>
-      <label>What are you hoping to achieve through therapy?</label>
+    <div className="textarea-group full-width">
+      <label className="question-label">What are you hoping to achieve through therapy?</label>
+      <textarea name="therapyGoals" value={formData.therapyGoals || ''} onChange={handleChange} required rows={3}></textarea>
     </div>
     
     <h4 style={{ color: 'var(--color-primary)', marginTop: '2rem', marginBottom: '1rem' }}>Previous Inpatient or Outpatient treatment and/or counseling</h4>
@@ -157,9 +157,9 @@ export const ClinicalInfo = ({ formData, handleChange }) => (
         <label>With Whom</label>
       </div>
     </div>
-    <div className="input-group full-width">
-      <textarea name="prevTreatmentHelpful" placeholder=" " value={formData.prevTreatmentHelpful || ''} onChange={handleChange} rows={2}></textarea>
-      <label>Did you find it helpful? Why/why not:</label>
+    <div className="textarea-group full-width">
+      <label className="question-label">Did you find it helpful? Why/why not:</label>
+      <textarea name="prevTreatmentHelpful" value={formData.prevTreatmentHelpful || ''} onChange={handleChange} rows={2}></textarea>
     </div>
   </div>
 );
@@ -310,7 +310,7 @@ export const MedicalHistory = ({ formData, handleChange, setFormData }) => {
       </div>
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '2rem' }}>
-        <p style={{ color: 'var(--color-text)' }}>May I notify your physician that I am treating you?</p>
+        <p style={{ color: 'var(--color-primary)', fontWeight: '600', margin: 0 }}>May I notify your physician that I am treating you?</p>
         <label className="checkbox-label"><input type="radio" name="notifyPcp" value="Yes" checked={formData.notifyPcp === 'Yes'} onChange={handleChange} /><span className="checkbox-text">YES</span></label>
         <label className="checkbox-label"><input type="radio" name="notifyPcp" value="No" checked={formData.notifyPcp === 'No'} onChange={handleChange} /><span className="checkbox-text">NO</span></label>
       </div>
@@ -366,17 +366,17 @@ export const MedicalHistory = ({ formData, handleChange, setFormData }) => {
         </button>
       </div>
 
-      <div className="input-group full-width">
-        <textarea name="seriousIllnesses" placeholder=" " value={formData.seriousIllnesses || ''} onChange={handleChange} rows={2}></textarea>
-        <label>List any serious illnesses or injuries, especially those involving the head:</label>
+      <div className="textarea-group full-width">
+        <label className="question-label">List any serious illnesses or injuries, especially those involving the head:</label>
+        <textarea name="seriousIllnesses" value={formData.seriousIllnesses || ''} onChange={handleChange} rows={2}></textarea>
       </div>
-      <div className="input-group full-width">
-        <textarea name="surgeries" placeholder=" " value={formData.surgeries || ''} onChange={handleChange} rows={2}></textarea>
-        <label>List any major surgeries you have had to date:</label>
+      <div className="textarea-group full-width">
+        <label className="question-label">List any major surgeries you have had to date:</label>
+        <textarea name="surgeries" value={formData.surgeries || ''} onChange={handleChange} rows={2}></textarea>
       </div>
-      <div className="input-group full-width">
-        <textarea name="allergies" placeholder=" " value={formData.allergies || ''} onChange={handleChange} rows={2}></textarea>
-        <label>List allergies to food or drugs:</label>
+      <div className="textarea-group full-width">
+        <label className="question-label">List allergies to food or drugs:</label>
+        <textarea name="allergies" value={formData.allergies || ''} onChange={handleChange} rows={2}></textarea>
       </div>
     </div>
   );
@@ -427,7 +427,20 @@ export const SymptomsChecklist = ({ formData, handleCheckboxChange, handleChange
   );
 };
 
-export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd, sigPadRef, handleGuardianSignatureEnd, guardianSigPadRef, handleHipaaSignatureEnd, hipaaSigPadRef }) => (
+export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd, sigPadRef, handleGuardianSignatureEnd, guardianSigPadRef, handleHipaaSignatureEnd, hipaaSigPadRef }) => {
+  useEffect(() => {
+    if (formData.signatureData && sigPadRef.current) {
+      sigPadRef.current.fromDataURL(formData.signatureData);
+    }
+    if (formData.guardianSignatureData && guardianSigPadRef.current) {
+      guardianSigPadRef.current.fromDataURL(formData.guardianSignatureData);
+    }
+    if (formData.hipaaSignatureData && hipaaSigPadRef.current) {
+      hipaaSigPadRef.current.fromDataURL(formData.hipaaSignatureData);
+    }
+  }, [formData.signatureData, formData.guardianSignatureData, formData.hipaaSignatureData, sigPadRef, guardianSigPadRef, hipaaSigPadRef]);
+
+  return (
   <div className="step-content">
     <h3 className="step-title">Consents, Policies & Signatures</h3>
     
@@ -544,7 +557,8 @@ export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd,
           <input type="date" name="hipaaSignatureDate" placeholder=" " value={formData.hipaaSignatureDate || ''} onChange={handleChange} required />
           <label className="active-label">Date</label>
         </div>
-      </div>
+    </div>
     </div>
   </div>
-);
+  );
+};

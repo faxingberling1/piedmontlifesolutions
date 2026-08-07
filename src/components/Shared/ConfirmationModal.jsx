@@ -1,10 +1,11 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 import './ConfirmationModal.css';
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirmText, cancelText, isLoading }) => {
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay">
       <div className="modal-container">
         <h2 className="modal-title">{title || "Confirm Submission"}</h2>
@@ -12,7 +13,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirm
         
         <div className="modal-actions">
           <button 
-            className="btn-clear modal-btn-cancel" 
+            className="modal-btn-cancel" 
             onClick={onClose}
             disabled={isLoading}
           >
@@ -27,7 +28,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirm
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
