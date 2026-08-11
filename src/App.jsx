@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FileText, Shield, Video, Home } from 'lucide-react'
+import { FileText, Shield, Video, Home, Lock } from 'lucide-react'
 import IntakeFormWizard from './components/IntakeForm/IntakeFormWizard'
 import InsuranceForm from './components/InsuranceForm/InsuranceForm'
 import TelehealthForm from './components/TelehealthForm/TelehealthForm'
@@ -80,6 +80,10 @@ function FormsPortal() {
             <p className="form-subtitle">
               {forms.find(f => f.id === activeForm)?.description}
             </p>
+            <div className="encryption-badge">
+              <Lock size={14} />
+              <span>End-to-End Encrypted</span>
+            </div>
           </div>
 
           {/* Form Content Wrapper */}
