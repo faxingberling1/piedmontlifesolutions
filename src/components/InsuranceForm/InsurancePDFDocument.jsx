@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
 const Header = () => (
   <View style={styles.headerWrap} fixed>
     <View style={styles.headerLeft}>
-      <Text style={styles.clinicName}>Piedmont Life Solutions</Text>
+      <Text style={styles.clinicName}>Piedmont Counseling</Text>
       <Text style={styles.formTitle}>Insurance Authorization Form</Text>
     </View>
     <View style={styles.headerRight}>

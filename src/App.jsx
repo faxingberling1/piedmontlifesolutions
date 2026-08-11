@@ -5,7 +5,8 @@ import InsuranceForm from './components/InsuranceForm/InsuranceForm'
 import TelehealthForm from './components/TelehealthForm/TelehealthForm'
 import './App.css'
 
-function App() {
+// The existing forms portal layout
+function FormsPortal() {
   const [activeForm, setActiveForm] = useState('intake'); // 'intake', 'insurance', 'telehealth'
 
   const forms = [
@@ -38,9 +39,7 @@ function App() {
       {/* Sidebar Navigation */}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <a href="https://piedmontlifesolutions.com">
-            <img src="/logo.png" alt="Piedmont Counseling | Development" className="brand-logo" />
-          </a>
+          <img src="/logo.png" alt="Piedmont Logo" className="brand-logo" />
           <h2 className="sidebar-title">Patient Forms</h2>
           <span className="sidebar-subtitle">Please select a form to complete</span>
         </div>
@@ -64,7 +63,7 @@ function App() {
         </nav>
 
         <div className="sidebar-footer">
-          <a href="https://piedmontlifesolutions.com" className="sidebar-home-btn">
+          <a href="/" className="sidebar-home-btn">
             <Home size={18} />
             <span>Return to Homepage</span>
           </a>
@@ -101,6 +100,10 @@ function App() {
       </main>
     </div>
   )
+}
+
+function App() {
+  return <FormsPortal />
 }
 
 export default App

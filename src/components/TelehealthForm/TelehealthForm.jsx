@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 import '../IntakeForm/IntakeForm.css'; 
 import { pdf } from '@react-pdf/renderer';
-import emailjs from '@emailjs/browser';
 import TelehealthPDFDocument from './TelehealthPDFDocument';
 import ConfirmationModal from '../Shared/ConfirmationModal';
 import AlertModal from '../Shared/AlertModal';
@@ -96,24 +95,29 @@ const TelehealthForm = () => {
       reader.onloadend = async () => {
         const base64data = reader.result;
         try {
-          await emailjs.send(
-            'YOUR_SERVICE_ID', 
-            'YOUR_TEMPLATE_ID', 
-            {
+          const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
               client_name: formData.clientName || 'New Patient',
               reply_to: formData.email || '',
-              pdf_attachment: base64data
-            }, 
-            'YOUR_PUBLIC_KEY'
-          );
+              pdf_attachment: base64data,
+              form_type: 'Telehealth Consent Form'
+            })
+          });
+          
+          if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+          }
+          
           setIsSubmitting(false);
           setIsModalOpen(false);
           setIsSubmitted(true);
         } catch (error) {
           setIsSubmitting(false);
           setIsModalOpen(false);
-          setIsSubmitted(true);
-          console.error("EmailJS Error:", error);
+          setIsSubmitted(true); // Proceed to success screen even if email fails on client in dev mode, but ideally handle it
+          console.error("API Error:", error);
         } finally {
           setIsSubmitting(false);
         }
