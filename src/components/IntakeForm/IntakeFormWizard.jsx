@@ -3,6 +3,7 @@ import { pdf } from '@react-pdf/renderer';
 import IntakePDFDocument from './IntakePDFDocument';
 import ConfirmationModal from '../Shared/ConfirmationModal';
 import AlertModal from '../Shared/AlertModal';
+import WelcomeModal from '../Shared/WelcomeModal';
 import { 
   ClientInfo, 
   ClinicalInfo, 
@@ -19,11 +20,13 @@ const IntakeFormWizard = () => {
   const sigPadRef = useRef(null);
   const guardianSigPadRef = useRef(null);
   const hipaaSigPadRef = useRef(null);
+  const officePoliciesSigPadRef = useRef(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [alertState, setAlertState] = useState({ isOpen: false, title: '', message: '' });
   const [formError, setFormError] = useState('');
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState(true);
 
   const showAlert = (title, message) => setAlertState({ isOpen: true, title, message });
   const closeAlert = () => setAlertState({ isOpen: false, title: '', message: '' });
@@ -33,7 +36,8 @@ const IntakeFormWizard = () => {
     medications: [{ name: '', reason: '' }],
     signatureData: null,
     guardianSignatureData: null,
-    hipaaSignatureData: null
+    hipaaSignatureData: null,
+    officePoliciesSignatureData: null
   });
 
   const handleChange = (e) => {
@@ -76,6 +80,15 @@ const IntakeFormWizard = () => {
       setFormData(prev => ({ ...prev, hipaaSignatureData: hipaaSigPadRef.current.toDataURL() }));
     } else {
       setFormData(prev => ({ ...prev, hipaaSignatureData: null }));
+    }
+  };
+
+  const handleOfficePoliciesSignatureEnd = () => {
+    setFormError('');
+    if (officePoliciesSigPadRef.current && !officePoliciesSigPadRef.current.isEmpty()) {
+      setFormData(prev => ({ ...prev, officePoliciesSignatureData: officePoliciesSigPadRef.current.toDataURL() }));
+    } else {
+      setFormData(prev => ({ ...prev, officePoliciesSignatureData: null }));
     }
   };
 
@@ -237,6 +250,8 @@ const IntakeFormWizard = () => {
               guardianSigPadRef={guardianSigPadRef}
               handleHipaaSignatureEnd={handleHipaaSignatureEnd}
               hipaaSigPadRef={hipaaSigPadRef}
+              handleOfficePoliciesSignatureEnd={handleOfficePoliciesSignatureEnd}
+              officePoliciesSigPadRef={officePoliciesSigPadRef}
             />
           )}
         </div>
@@ -307,6 +322,10 @@ const IntakeFormWizard = () => {
       title={alertState.title}
       message={alertState.message}
       onClose={closeAlert}
+    />
+    <WelcomeModal 
+      isOpen={isWelcomeModalOpen} 
+      onClose={() => setIsWelcomeModalOpen(false)} 
     />
   </>
   );

@@ -30,6 +30,17 @@ const InsuranceForm = () => {
     }
   };
 
+  const handleFileUpload = (e, side) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prev => ({ ...prev, [side]: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSignatureEnd = () => {
     setFormError('');
     if (sigPadRef.current && !sigPadRef.current.isEmpty()) {
@@ -143,154 +154,186 @@ const InsuranceForm = () => {
       <div className="wizard-container">
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="step-content">
-          
-          <div className="input-group" style={{ marginBottom: '2rem' }}>
-            <input type="text" name="clientName" placeholder=" " value={formData.clientName || ''} onChange={handleChange} required />
-            <label>Client Name (Patient)</label>
-          </div>
-
-          {/* Billable Party Info */}
+          <h3 className="step-title" style={{ fontSize: '1.4rem' }}>Client Information</h3>
           <div className="form-grid">
             <div className="input-group">
-              <input type="text" name="billableParty" placeholder=" " value={formData.billableParty || ''} onChange={handleChange} required />
-              <label>Billable Party Name</label>
+              <input type="text" name="clientName" placeholder=" " value={formData.clientName || ''} onChange={handleChange} required />
+              <label>Client/Patient Name</label>
             </div>
             <div className="input-group">
-              <input type="text" name="relationshipToClient" placeholder=" " value={formData.relationshipToClient || ''} onChange={handleChange} required />
-              <label>Relationship to Client</label>
+              <input type="date" name="clientDob" placeholder=" " value={formData.clientDob || ''} onChange={handleChange} required />
+              <label className="active-label">Date of Birth</label>
             </div>
           </div>
           
           <div className="input-group">
-            <input type="text" name="address" placeholder=" " value={formData.address || ''} onChange={handleChange} required />
-            <label>Street Address</label>
+            <input type="text" name="clientAddress" placeholder=" " value={formData.clientAddress || ''} onChange={handleChange} required />
+            <label>Address</label>
           </div>
           
           <div className="form-grid">
             <div className="input-group">
-              <input type="text" name="city" placeholder=" " value={formData.city || ''} onChange={handleChange} required />
+              <input type="text" name="clientCity" placeholder=" " value={formData.clientCity || ''} onChange={handleChange} required />
               <label>City</label>
             </div>
             <div className="input-group">
-              <input type="text" name="state" placeholder=" " value={formData.state || ''} onChange={handleChange} required />
+              <input type="text" name="clientState" placeholder=" " value={formData.clientState || ''} onChange={handleChange} required />
               <label>State</label>
             </div>
             <div className="input-group">
-              <input type="text" name="zip" placeholder=" " value={formData.zip || ''} onChange={handleChange} required />
-              <label>Zip</label>
-            </div>
-            <div className="input-group">
-              <input type="tel" name="phone" placeholder=" " value={formData.phone || ''} onChange={handleChange} required />
-              <label>Phone #</label>
+              <input type="text" name="clientZip" placeholder=" " value={formData.clientZip || ''} onChange={handleChange} required />
+              <label>ZIP</label>
             </div>
           </div>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <p className="step-subtitle" style={{ marginBottom: '0.5rem' }}>Client's relationship to primary insured:</p>
+          <div className="form-grid">
+            <div className="input-group">
+              <input type="tel" name="clientPhone" placeholder=" " value={formData.clientPhone || ''} onChange={handleChange} required />
+              <label>Phone Number</label>
+            </div>
+            <div className="input-group">
+              <input type="email" name="clientEmail" placeholder=" " value={formData.clientEmail || ''} onChange={handleChange} required />
+              <label>Email Address</label>
+            </div>
+          </div>
+
+          <h3 className="step-title" style={{ fontSize: '1.4rem', marginTop: '2rem' }}>Primary Insurance</h3>
+          <div className="input-group">
+            <input type="text" name="primaryInsCompany" placeholder=" " value={formData.primaryInsCompany || ''} onChange={handleChange} required />
+            <label>Insurance Company</label>
+          </div>
+          <div className="form-grid">
+            <div className="input-group">
+              <input type="text" name="primaryInsId" placeholder=" " value={formData.primaryInsId || ''} onChange={handleChange} required />
+              <label>Member/Subscriber ID</label>
+            </div>
+            <div className="input-group">
+              <input type="text" name="primaryInsGroup" placeholder=" " value={formData.primaryInsGroup || ''} onChange={handleChange} required />
+              <label>Group Number</label>
+            </div>
+          </div>
+          <div className="form-grid">
+            <div className="input-group">
+              <input type="text" name="primaryInsPlan" placeholder=" " value={formData.primaryInsPlan || ''} onChange={handleChange} />
+              <label>Plan Name/Type (if known)</label>
+            </div>
+            <div className="input-group">
+              <input type="tel" name="primaryInsPhone" placeholder=" " value={formData.primaryInsPhone || ''} onChange={handleChange} />
+              <label>Insurance Company Phone Number</label>
+            </div>
+          </div>
+
+          <h3 className="step-title" style={{ fontSize: '1.4rem', marginTop: '2rem' }}>Policyholder/Subscriber Information</h3>
+          <p className="step-subtitle">If the insurance policy is in someone else's name, please complete the following:</p>
+          <div className="input-group" style={{ marginTop: '1rem' }}>
+            <input type="text" name="policyholderName" placeholder=" " value={formData.policyholderName || ''} onChange={handleChange} />
+            <label>Policyholder/Subscriber Name</label>
+          </div>
+          <div style={{ marginBottom: '1.5rem' }}>
+            <p className="step-subtitle" style={{ marginBottom: '0.5rem' }}>Relationship to Client:</p>
             <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              {['Self', 'Spouse', 'Partner', 'Child', 'Other'].map(rel => (
+              {['Self', 'Spouse', 'Parent', 'Other'].map(rel => (
                 <label key={rel} className="checkbox-label">
-                  <input type="radio" name="clientRelationship" value={rel} checked={formData.clientRelationship === rel} onChange={handleChange} />
+                  <input type="radio" name="policyholderRelationship" value={rel} checked={formData.policyholderRelationship === rel} onChange={handleChange} />
                   <span className="checkbox-text">{rel}</span>
                 </label>
               ))}
             </div>
+            {formData.policyholderRelationship === 'Other' && (
+              <div className="input-group" style={{ marginTop: '1rem' }}>
+                <input type="text" name="policyholderRelationshipOther" placeholder=" " value={formData.policyholderRelationshipOther || ''} onChange={handleChange} />
+                <label>Please specify (Other)</label>
+              </div>
+            )}
           </div>
-
-          <h3 className="step-title" style={{ fontSize: '1.4rem', marginTop: '1rem' }}>Primary Insured Information</h3>
-          <p className="step-subtitle">(if different from above)</p>
-          
           <div className="form-grid">
             <div className="input-group">
-              <input type="text" name="primaryName" placeholder=" " value={formData.primaryName || ''} onChange={handleChange} />
-              <label>Primary Insured's Name</label>
+              <input type="date" name="policyholderDob" placeholder=" " value={formData.policyholderDob || ''} onChange={handleChange} />
+              <label className="active-label">Policyholder Date of Birth</label>
             </div>
             <div className="input-group">
-              <input type="date" name="primaryDob" placeholder=" " value={formData.primaryDob || ''} onChange={handleChange} />
-              <label className="active-label">Birthdate</label>
-            </div>
-            <div className="input-group">
-              <input type="text" name="primarySsn" placeholder=" " value={formData.primarySsn || ''} onChange={handleChange} />
-              <label>Insured's Social Security #</label>
-            </div>
-            <div className="input-group">
-              <input type="text" name="primaryEmployer" placeholder=" " value={formData.primaryEmployer || ''} onChange={handleChange} />
-              <label>Primary Insured's Employer</label>
+              <input type="text" name="policyholderEmployer" placeholder=" " value={formData.policyholderEmployer || ''} onChange={handleChange} />
+              <label>Policyholder Employer (if applicable)</label>
             </div>
           </div>
 
+          <h3 className="step-title" style={{ fontSize: '1.4rem', marginTop: '2rem' }}>Secondary Insurance, If Applicable</h3>
           <div className="input-group">
-            <input type="text" name="primaryAddressStreet" placeholder=" " value={formData.primaryAddressStreet || ''} onChange={handleChange} />
-            <label>Primary Insured's Address: Street</label>
+            <input type="text" name="secondaryInsCompany" placeholder=" " value={formData.secondaryInsCompany || ''} onChange={handleChange} />
+            <label>Insurance Company</label>
           </div>
           <div className="form-grid">
             <div className="input-group">
-              <input type="text" name="primaryCity" placeholder=" " value={formData.primaryCity || ''} onChange={handleChange} />
-              <label>City</label>
+              <input type="text" name="secondaryInsId" placeholder=" " value={formData.secondaryInsId || ''} onChange={handleChange} />
+              <label>Member/Subscriber ID</label>
             </div>
             <div className="input-group">
-              <input type="text" name="primaryState" placeholder=" " value={formData.primaryState || ''} onChange={handleChange} />
-              <label>State</label>
+              <input type="text" name="secondaryInsGroup" placeholder=" " value={formData.secondaryInsGroup || ''} onChange={handleChange} />
+              <label>Group Number</label>
+            </div>
+          </div>
+          <div className="input-group">
+            <input type="text" name="secondaryPolicyholderName" placeholder=" " value={formData.secondaryPolicyholderName || ''} onChange={handleChange} />
+            <label>Policyholder Name</label>
+          </div>
+          <div className="form-grid">
+            <div className="input-group">
+              <input type="text" name="secondaryPolicyholderRelationship" placeholder=" " value={formData.secondaryPolicyholderRelationship || ''} onChange={handleChange} />
+              <label>Relationship to Client</label>
             </div>
             <div className="input-group">
-              <input type="text" name="primaryZip" placeholder=" " value={formData.primaryZip || ''} onChange={handleChange} />
-              <label>Zip</label>
+              <input type="date" name="secondaryPolicyholderDob" placeholder=" " value={formData.secondaryPolicyholderDob || ''} onChange={handleChange} />
+              <label className="active-label">Policyholder Date of Birth</label>
             </div>
           </div>
 
-          <div style={{ marginBottom: '2rem' }}>
-            <p className="step-subtitle" style={{ marginBottom: '0.5rem' }}>Primary Insured's Gender:</p>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              {['Male', 'Female', 'Transgender'].map(gender => (
-                <label key={gender} className="checkbox-label">
-                  <input type="radio" name="primaryGender" value={gender} checked={formData.primaryGender === gender} onChange={handleChange} />
-                  <span className="checkbox-text">{gender}</span>
+          <h3 className="step-title" style={{ fontSize: '1.4rem', marginTop: '2rem' }}>Insurance Card</h3>
+          <p className="step-subtitle" style={{ marginBottom: '1rem' }}>Please provide a clear copy or image of the front and back of your current insurance card.</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ margin: 0 }}>
+              <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '1rem', color: 'var(--color-primary)', fontWeight: 600 }}>Front of insurance card (JPG, PNG, PDF)</label>
+              <div className="file-upload-wrapper">
+                <input type="file" id="frontCardFile" name="frontCardFile" accept=".jpg,.jpeg,.png,.pdf" onChange={e => handleFileUpload(e, 'frontCardData')} required className="file-upload-input" />
+                <label htmlFor="frontCardFile" className="file-upload-label">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span>{formData.frontCardData ? "Front Card Selected (Click to change)" : "Upload Front of Card"}</span>
                 </label>
-              ))}
+              </div>
             </div>
-          </div>
-
-          <h3 className="step-title" style={{ fontSize: '1.4rem' }}>Insurance Details</h3>
-          
-          <div className="input-group">
-            <input type="text" name="primaryInsuranceName" placeholder=" " value={formData.primaryInsuranceName || ''} onChange={handleChange} required />
-            <label>Primary Insurance Company Name</label>
-          </div>
-          <div className="form-grid">
-            <div className="input-group">
-              <input type="text" name="primaryInsuranceId" placeholder=" " value={formData.primaryInsuranceId || ''} onChange={handleChange} required />
-              <label>Primary Insurance I.D. #</label>
-            </div>
-            <div className="input-group">
-              <input type="text" name="primaryInsuranceGroup" placeholder=" " value={formData.primaryInsuranceGroup || ''} onChange={handleChange} />
-              <label>Group #</label>
-            </div>
-          </div>
-
-          <div className="input-group" style={{ marginTop: '1rem' }}>
-            <input type="text" name="secondaryInsuranceName" placeholder=" " value={formData.secondaryInsuranceName || ''} onChange={handleChange} />
-            <label>Secondary Insurance Company Name (Optional)</label>
-          </div>
-          <div className="form-grid">
-            <div className="input-group">
-              <input type="text" name="secondaryInsuranceId" placeholder=" " value={formData.secondaryInsuranceId || ''} onChange={handleChange} />
-              <label>Secondary Insurance I.D. #</label>
-            </div>
-            <div className="input-group">
-              <input type="text" name="secondaryInsuranceGroup" placeholder=" " value={formData.secondaryInsuranceGroup || ''} onChange={handleChange} />
-              <label>Group #</label>
+            <div style={{ margin: 0 }}>
+              <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '1rem', color: 'var(--color-primary)', fontWeight: 600 }}>Back of insurance card (JPG, PNG, PDF)</label>
+              <div className="file-upload-wrapper">
+                <input type="file" id="backCardFile" name="backCardFile" accept=".jpg,.jpeg,.png,.pdf" onChange={e => handleFileUpload(e, 'backCardData')} required className="file-upload-input" />
+                <label htmlFor="backCardFile" className="file-upload-label">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span>{formData.backCardData ? "Back Card Selected (Click to change)" : "Upload Back of Card"}</span>
+                </label>
+              </div>
             </div>
           </div>
 
           <div className="consent-box" style={{ marginTop: '2rem' }}>
-            <h4>Authorization & Assignment of Benefits</h4>
-            <p>
-              I hereby authorize the release of any medical or other information necessary to process all claims for the client described above. 
-              I also request and assign payment of insurance, medical, and or government benefits to Piedmont Counseling & Development Services, PLLC.
-            </p>
+            <h4>Authorization to Verify Benefits and Submit Claims</h4>
+            <div style={{ fontSize: '0.9rem', color: 'var(--color-text-light)', paddingRight: '1rem', marginBottom: '1rem' }}>
+              <p style={{ marginBottom: '1rem' }}>I authorize Piedmont Counseling and Development Services, PLLC and its authorized representatives to obtain information from my insurance company regarding my eligibility, benefits, coverage, deductibles, copayments, coinsurance, authorization requirements, and other information necessary for billing and payment purposes.</p>
+              <p style={{ marginBottom: '1rem' }}>I authorize Piedmont Counseling and Development Services, PLLC to submit claims to my insurance carrier for covered services provided to me.</p>
+              <p>I authorize the release of information reasonably necessary to process insurance claims, obtain payment, and conduct related healthcare operations, as permitted by applicable law.</p>
+            </div>
+
+            <h4 style={{ marginTop: '1.5rem' }}>Assignment of Insurance Benefits</h4>
+            <div style={{ fontSize: '0.9rem', color: 'var(--color-text-light)', paddingRight: '1rem', marginBottom: '1rem' }}>
+              <p style={{ marginBottom: '1rem' }}>I authorize payment of insurance benefits, when permitted by my insurance plan, directly to Piedmont Counseling and Development Services, PLLC for services provided to me.</p>
+              <p style={{ marginBottom: '1rem' }}>I understand that verification of insurance benefits <strong>does not guarantee payment by my insurance company</strong>.</p>
+              <p style={{ marginBottom: '1rem' }}>I understand that I am responsible for understanding my insurance benefits and for amounts that are my responsibility under my insurance plan, including applicable copayments, coinsurance, deductibles, and non-covered services, subject to applicable law and my agreements with the practice.</p>
+              <p>If my insurance coverage changes or terminates, I agree to notify Piedmont Counseling and Development Services, PLLC as soon as possible and provide updated insurance information.</p>
+            </div>
+
+            <h4 style={{ marginTop: '1.5rem' }}>Client Acknowledgment and Authorization</h4>
+            <p style={{ fontSize: '0.9rem', color: 'var(--color-text-light)', marginBottom: '1.5rem' }}>By signing below, I acknowledge that the information I have provided is accurate to the best of my knowledge. I have read and understand the insurance authorization information above and authorize Piedmont Counseling and Development Services, PLLC to verify benefits and submit claims as described.</p>
+
             <div className="signature-section" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
               <div style={{ flex: 2, minWidth: '300px' }}>
-                <span className="signature-label">Patient/Authorized Person Signature (Required)</span>
+                <span className="signature-label">Signature (Required)</span>
                 <div className="signature-container" style={{ border: '1px solid rgba(28,43,76,0.2)', borderRadius: '8px', background: 'rgba(255,255,255,0.8)', height: '150px' }}>
                   <SignatureCanvas 
                     ref={sigPadRef}
@@ -302,9 +345,15 @@ const InsuranceForm = () => {
                 <button type="button" className="btn-clear" onClick={() => { sigPadRef.current.clear(); handleSignatureEnd(); }}>Clear Signature</button>
               </div>
               
-              <div className="input-group" style={{ flex: 1, minWidth: '200px', marginTop: '1.5rem' }}>
-                <input type="date" name="signatureDate" placeholder=" " value={formData.signatureDate || ''} onChange={handleChange} required />
-                <label className="active-label">Date</label>
+              <div style={{ flex: 1, minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '1.5rem' }}>
+                <div className="input-group" style={{ margin: 0 }}>
+                  <input type="date" name="signatureDate" placeholder=" " value={formData.signatureDate || ''} onChange={handleChange} required />
+                  <label className="active-label">Date</label>
+                </div>
+                <div className="input-group" style={{ margin: 0 }}>
+                  <input type="text" name="signatureRelationship" placeholder=" " value={formData.signatureRelationship || ''} onChange={handleChange} />
+                  <label>Relationship to Client (if applicable)</label>
+                </div>
               </div>
             </div>
           </div>

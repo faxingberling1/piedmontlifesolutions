@@ -75,7 +75,7 @@ const Field = ({ label, value, width = 'colHalf' }) => (
   </View>
 );
 
-const Signature = ({ label, imgData, date }) => (
+const Signature = ({ label, imgData, date, relationship }) => (
   <View style={styles.sigSection}>
     <View style={styles.sigBlock}>
       {Boolean(imgData) && <Image style={styles.sigImage} src={imgData} />}
@@ -85,6 +85,12 @@ const Signature = ({ label, imgData, date }) => (
       <Text style={styles.sigDate}>{date || '—'}</Text>
       <Text style={styles.sigLine}>Date Signed</Text>
     </View>
+    {relationship !== undefined && (
+      <View style={styles.dateBlock}>
+        <Text style={styles.sigDate}>{relationship || '—'}</Text>
+        <Text style={styles.sigLine}>Relationship</Text>
+      </View>
+    )}
   </View>
 );
 
@@ -96,65 +102,105 @@ const InsurancePDFDocument = ({ formData }) => {
         
         <View style={styles.content}>
           <View style={styles.sectionBlock}>
-            <SectionTitle>Client Profile</SectionTitle>
+            <SectionTitle>Client Information</SectionTitle>
             <View style={styles.grid}>
-              <Field label="Client Name" value={formData.clientName} width="colFull" />
-              <Field label="Billable Party" value={formData.billableParty} width="colHalf" />
-              <Field label="Relationship to Client" value={formData.relationshipToClient} width="colHalf" />
-              <Field label="Street Address" value={formData.address} width="colFull" />
-              <Field label="City" value={formData.city} width="colThird" />
-              <Field label="State" value={formData.state} width="colThird" />
-              <Field label="Zip" value={formData.zip} width="colThird" />
-              <Field label="Phone" value={formData.phone} width="colHalf" />
-              <Field label="Relationship to Primary Insured" value={formData.clientRelationship} width="colHalf" />
+              <Field label="Client/Patient Name" value={formData.clientName} width="colHalf" />
+              <Field label="Date of Birth" value={formData.clientDob} width="colHalf" />
+              <Field label="Address" value={formData.clientAddress} width="colFull" />
+              <Field label="City" value={formData.clientCity} width="colThird" />
+              <Field label="State" value={formData.clientState} width="colThird" />
+              <Field label="Zip" value={formData.clientZip} width="colThird" />
+              <Field label="Phone" value={formData.clientPhone} width="colHalf" />
+              <Field label="Email" value={formData.clientEmail} width="colHalf" />
             </View>
           </View>
 
           <View style={styles.sectionBlock}>
-            <SectionTitle>Primary Insured Information</SectionTitle>
+            <SectionTitle>Primary Insurance</SectionTitle>
             <View style={styles.grid}>
-              <Field label="Primary Insured's Name" value={formData.primaryName} width="colHalf" />
-              <Field label="Birthdate" value={formData.primaryDob} width="colHalf" />
-              <Field label="Insured's SSN" value={formData.primarySsn} width="colHalf" />
-              <Field label="Employer" value={formData.primaryEmployer} width="colHalf" />
-              <Field label="Primary Address" value={formData.primaryAddressStreet} width="colFull" />
-              <Field label="City" value={formData.primaryCity} width="colThird" />
-              <Field label="State" value={formData.primaryState} width="colThird" />
-              <Field label="Zip" value={formData.primaryZip} width="colThird" />
-              <Field label="Gender" value={formData.primaryGender} width="colFull" />
+              <Field label="Insurance Company" value={formData.primaryInsCompany} width="colFull" />
+              <Field label="Member/Subscriber ID" value={formData.primaryInsId} width="colHalf" />
+              <Field label="Group Number" value={formData.primaryInsGroup} width="colHalf" />
+              <Field label="Plan Name/Type" value={formData.primaryInsPlan} width="colHalf" />
+              <Field label="Insurance Company Phone" value={formData.primaryInsPhone} width="colHalf" />
             </View>
           </View>
 
+          {Boolean(formData.policyholderName) && (
+            <View style={styles.sectionBlock}>
+              <SectionTitle>Policyholder/Subscriber Information</SectionTitle>
+              <View style={styles.grid}>
+                <Field label="Policyholder Name" value={formData.policyholderName} width="colHalf" />
+                <Field label="Relationship to Client" value={formData.policyholderRelationship === 'Other' ? `Other (${formData.policyholderRelationshipOther})` : formData.policyholderRelationship} width="colHalf" />
+                <Field label="Policyholder Date of Birth" value={formData.policyholderDob} width="colHalf" />
+                <Field label="Employer" value={formData.policyholderEmployer} width="colHalf" />
+              </View>
+            </View>
+          )}
+
+          {Boolean(formData.secondaryInsCompany) && (
+            <View style={styles.sectionBlock}>
+              <SectionTitle>Secondary Insurance</SectionTitle>
+              <View style={styles.grid}>
+                <Field label="Insurance Company" value={formData.secondaryInsCompany} width="colFull" />
+                <Field label="Member/Subscriber ID" value={formData.secondaryInsId} width="colHalf" />
+                <Field label="Group Number" value={formData.secondaryInsGroup} width="colHalf" />
+                <Field label="Policyholder Name" value={formData.secondaryPolicyholderName} width="colFull" />
+                <Field label="Relationship to Client" value={formData.secondaryPolicyholderRelationship} width="colHalf" />
+                <Field label="Policyholder DOB" value={formData.secondaryPolicyholderDob} width="colHalf" />
+              </View>
+            </View>
+          )}
+
           <View style={styles.sectionBlock}>
-            <SectionTitle>Insurance Details</SectionTitle>
+            <SectionTitle>Insurance Card</SectionTitle>
             <View style={styles.grid}>
-              <Field label="Primary Insurance Company" value={formData.primaryInsuranceName} width="colFull" />
-              <Field label="Primary I.D. #" value={formData.primaryInsuranceId} width="colHalf" />
-              <Field label="Primary Group #" value={formData.primaryInsuranceGroup} width="colHalf" />
-              
-              {Boolean(formData.secondaryInsuranceName) && (
-                <>
-                  <Field label="Secondary Insurance Company" value={formData.secondaryInsuranceName} width="colFull" />
-                  <Field label="Secondary I.D. #" value={formData.secondaryInsuranceId} width="colHalf" />
-                  <Field label="Secondary Group #" value={formData.secondaryInsuranceGroup} width="colHalf" />
-                </>
+              <Field label="Front of Card Provided" value={formData.frontCardData ? 'Yes' : 'No'} width="colHalf" />
+              <Field label="Back of Card Provided" value={formData.backCardData ? 'Yes' : 'No'} width="colHalf" />
+            </View>
+            <View style={[styles.grid, { marginTop: 10 }]}>
+              {Boolean(formData.frontCardData) && formData.frontCardData.startsWith('data:image/') && (
+                <View style={[styles.colHalf, { alignItems: 'center' }]}>
+                  <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Front of Card</Text>
+                  <Image src={formData.frontCardData} style={{ width: '100%', maxHeight: 200, objectFit: 'contain' }} />
+                </View>
+              )}
+              {Boolean(formData.backCardData) && formData.backCardData.startsWith('data:image/') && (
+                <View style={[styles.colHalf, { alignItems: 'center' }]}>
+                  <Text style={[styles.fieldLabel, { marginBottom: 8 }]}>Back of Card</Text>
+                  <Image src={formData.backCardData} style={{ width: '100%', maxHeight: 200, objectFit: 'contain' }} />
+                </View>
               )}
             </View>
           </View>
 
           <View style={styles.sectionBlock}>
-            <SectionTitle>Authorization & Assignment of Benefits</SectionTitle>
-            <View style={[styles.fieldContainer, { backgroundColor: '#fdf8f6', borderColor: '#fef08a' }]}>
-              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY }]}>
-                I hereby authorize the release of any medical or other information necessary to process all claims for the client described above. I also request and assign payment of insurance, medical, and or government benefits to Piedmont Counseling & Development Services, PLLC.
-              </Text>
+            <SectionTitle>Authorizations & Agreements</SectionTitle>
+            
+            <Text style={[styles.fieldLabel, { marginTop: 10, marginBottom: 6, fontSize: 9, color: PRIMARY }]}>Authorization to Verify Benefits and Submit Claims</Text>
+            <View style={[styles.fieldContainer, { backgroundColor: '#fdf8f6', borderColor: '#fef08a', marginBottom: 15 }]}>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY, marginBottom: 8 }]}>I authorize Piedmont Counseling and Development Services, PLLC and its authorized representatives to obtain information from my insurance company regarding my eligibility, benefits, coverage, deductibles, copayments, coinsurance, authorization requirements, and other information necessary for billing and payment purposes.</Text>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY, marginBottom: 8 }]}>I authorize Piedmont Counseling and Development Services, PLLC to submit claims to my insurance carrier for covered services provided to me.</Text>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY }]}>I authorize the release of information reasonably necessary to process insurance claims, obtain payment, and conduct related healthcare operations, as permitted by applicable law.</Text>
             </View>
+
+            <Text style={[styles.fieldLabel, { marginTop: 10, marginBottom: 6, fontSize: 9, color: PRIMARY }]}>Assignment of Insurance Benefits</Text>
+            <View style={[styles.fieldContainer, { backgroundColor: '#fdf8f6', borderColor: '#fef08a', marginBottom: 15 }]}>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY, marginBottom: 8 }]}>I authorize payment of insurance benefits, when permitted by my insurance plan, directly to Piedmont Counseling and Development Services, PLLC for services provided to me.</Text>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY, marginBottom: 8 }]}>I understand that verification of insurance benefits does not guarantee payment by my insurance company.</Text>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY, marginBottom: 8 }]}>I understand that I am responsible for understanding my insurance benefits and for amounts that are my responsibility under my insurance plan, including applicable copayments, coinsurance, deductibles, and non-covered services, subject to applicable law and my agreements with the practice.</Text>
+              <Text style={[styles.fieldValue, { lineHeight: 1.6, color: PRIMARY }]}>If my insurance coverage changes or terminates, I agree to notify Piedmont Counseling and Development Services, PLLC as soon as possible and provide updated insurance information.</Text>
+            </View>
+
+            <Text style={[styles.fieldLabel, { marginTop: 10, marginBottom: 6, fontSize: 9, color: PRIMARY }]}>Client Acknowledgment and Authorization</Text>
+            <Text style={[styles.fieldValue, { lineHeight: 1.6, marginBottom: 15 }]}>By signing below, I acknowledge that the information I have provided is accurate to the best of my knowledge. I have read and understand the insurance authorization information above and authorize Piedmont Counseling and Development Services, PLLC to verify benefits and submit claims as described.</Text>
 
             <View style={{ marginTop: 30 }}>
               <Signature 
-                label="Patient/Authorized Person Signature" 
+                label="Signature" 
                 imgData={formData.signatureData} 
                 date={formData.signatureDate} 
+                relationship={formData.signatureRelationship}
               />
             </View>
           </View>

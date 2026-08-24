@@ -307,6 +307,14 @@ const IntakePDFDocument = ({ formData = {} }) => {
               <View style={{ height: 40 }} />
 
               <Signature 
+                label="Client Signature for Office Policies Acknowledgment" 
+                imgData={formData.officePoliciesSignatureData} 
+                date={formData.officePoliciesSignatureDate} 
+              />
+              
+              <View style={{ height: 40 }} />
+
+              <Signature 
                 label="Client Signature for HIPAA Acknowledgment" 
                 imgData={formData.hipaaSignatureData} 
                 date={formData.hipaaSignatureDate} 

@@ -427,7 +427,7 @@ export const SymptomsChecklist = ({ formData, handleCheckboxChange, handleChange
   );
 };
 
-export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd, sigPadRef, handleGuardianSignatureEnd, guardianSigPadRef, handleHipaaSignatureEnd, hipaaSigPadRef }) => {
+export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd, sigPadRef, handleGuardianSignatureEnd, guardianSigPadRef, handleHipaaSignatureEnd, hipaaSigPadRef, handleOfficePoliciesSignatureEnd, officePoliciesSigPadRef }) => {
   useEffect(() => {
     if (formData.signatureData && sigPadRef.current) {
       sigPadRef.current.fromDataURL(formData.signatureData);
@@ -438,7 +438,10 @@ export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd,
     if (formData.hipaaSignatureData && hipaaSigPadRef.current) {
       hipaaSigPadRef.current.fromDataURL(formData.hipaaSignatureData);
     }
-  }, [formData.signatureData, formData.guardianSignatureData, formData.hipaaSignatureData, sigPadRef, guardianSigPadRef, hipaaSigPadRef]);
+    if (formData.officePoliciesSignatureData && officePoliciesSigPadRef.current) {
+      officePoliciesSigPadRef.current.fromDataURL(formData.officePoliciesSignatureData);
+    }
+  }, [formData.signatureData, formData.guardianSignatureData, formData.hipaaSignatureData, formData.officePoliciesSignatureData, sigPadRef, guardianSigPadRef, hipaaSigPadRef, officePoliciesSigPadRef]);
 
   return (
   <div className="step-content">
@@ -447,10 +450,32 @@ export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd,
     <div className="consent-box" style={{ marginBottom: '2rem' }}>
       <h4>Consent for Treatment</h4>
       <div style={{ fontSize: '0.9rem', color: 'var(--color-text-light)', maxHeight: '200px', overflowY: 'auto', paddingRight: '1rem', marginBottom: '1rem' }}>
-        <p>I hereby give consent to Piedmont Counseling & Development Services, PLLC to provide evaluation, treatment, and/or other services that we may mutually determine to be appropriate. I understand that services will be rendered in a professional manner consistent with accepted ethical standards. I acknowledge that I have reviewed and read the professional disclosure sheet and the HIPPA information sheet.</p>
-        <p>I understand that I must cancel an appointment at least 24 hours before the scheduled time (excluding emergencies). Otherwise, I will be charged a cancellation fee for the session. Payment will be due and payable to Piedmont Counseling at the beginning of each session unless other arrangements have been negotiated.</p>
-        <p>I understand that if payment for services I received here is not made, the therapist may stop my treatment. I understand that I may discontinue my involvement in therapy at any time.</p>
-        <p>If I choose to do so, I will inform the therapist of my decision. Due to typical work schedules of therapists, I understand that it may take my therapist up to 48 hours to return a phone call. I also understand that calls made over the weekends and holidays will not be returned until the following business day. If at any time during treatment I cannot wait for a return call from my therapist, I agree to contact my psychiatrist, Mobile crisis, my primary physician, or go to the nearest emergency room.</p>
+        <p style={{ fontWeight: 'bold' }}>Consent to Mental Health Treatment</p>
+        <p style={{ marginBottom: '1rem' }}>I voluntarily consent to receive behavioral health services from Piedmont Counseling and Development Services, PLLC. I understand that services may include assessment, individual psychotherapy, family or couples counseling when appropriate, treatment planning, referrals, and other behavioral health services agreed upon between me and my treating clinician.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Nature of Counseling</p>
+        <p style={{ marginBottom: '1rem' }}>I understand that counseling is a collaborative process between the client and therapist. My therapist will work with me to identify concerns, establish treatment goals, and develop an appropriate plan for care. I understand that my active participation, including attending scheduled appointments, communicating openly, and working toward agreed-upon goals, is an important part of the therapeutic process.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Benefits and Risks of Treatment</p>
+        <p style={{ marginBottom: '0.5rem' }}>I understand that counseling may provide benefits such as improved coping skills, greater self-awareness, healthier relationships, reduced emotional distress, and improved overall functioning. However, no specific outcome or result can be guaranteed.</p>
+        <p style={{ marginBottom: '1rem' }}>I also understand that counseling may sometimes involve discussing difficult or painful experiences and may temporarily result in uncomfortable emotions such as sadness, anxiety, anger, frustration, or distress.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Confidentiality</p>
+        <p style={{ marginBottom: '0.5rem' }}>I understand that information discussed during treatment is generally confidential and will not be released without my written authorization except as permitted or required by law.</p>
+        <p style={{ marginBottom: '0.5rem' }}>I understand that there are certain circumstances in which my therapist may be legally or ethically required to disclose information, including situations involving suspected abuse or neglect, serious concerns regarding safety, or when disclosure is otherwise required by law or court order.</p>
+        <p style={{ marginBottom: '1rem' }}>Additional information regarding confidentiality and privacy practices is provided in the practice's Notice of Privacy Practices and related intake documents.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Right to Ask Questions and Participate in Treatment</p>
+        <p style={{ marginBottom: '0.5rem' }}>I understand that I have the right to ask questions about my treatment, treatment recommendations, therapeutic approaches, fees, policies, and alternatives to treatment.</p>
+        <p style={{ marginBottom: '1rem' }}>I may discuss concerns regarding my treatment with my therapist at any time. I understand that I may decline a particular recommendation or discontinue treatment. When appropriate, my therapist may discuss alternative treatment options or provide referrals to other providers.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Emergency and Crisis Services</p>
+        <p style={{ marginBottom: '1rem' }}>I understand that Piedmont Counseling and Development Services, PLLC is an outpatient behavioral health practice and is not an emergency or crisis-response service. If I am experiencing an immediate medical or psychiatric emergency, I should seek appropriate emergency assistance rather than relying on routine communication with my therapist or the practice.</p>
+        
+        <p style={{ fontWeight: 'bold' }}>Voluntary Consent</p>
+        <p style={{ marginBottom: '0.5rem' }}>By signing below, I acknowledge that I have reviewed and understand the information provided to me regarding behavioral health treatment. I have had the opportunity to ask questions and receive clarification regarding my care.</p>
+        <p style={{ marginBottom: '0.5rem' }}>I voluntarily consent to participate in behavioral health treatment with Piedmont Counseling and Development Services, PLLC.</p>
+        <p>I understand that my consent will remain in effect during the course of treatment unless I withdraw my consent or treatment is otherwise terminated.</p>
       </div>
       
       <p style={{ marginTop: '1.5rem', marginBottom: '1.5rem', fontWeight: '500', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', color: 'var(--color-primary)' }}>
@@ -517,10 +542,20 @@ export const ConsentsSignatures = ({ formData, handleChange, handleSignatureEnd,
           <li>If you become involved in any legal matter that requires your therapist to testify in court, or to prepare reports for your attorney or the court, you will be charged $100.00 per hour for these special services. These services will not be billed to insurance as they are not mental health therapy/evaluation services.</li>
         </ul>
       </div>
-      <label className="checkbox-label" style={{ marginTop: '0.5rem' }}>
-        <input type="checkbox" required />
-        <span className="checkbox-text" style={{ fontWeight: '600' }}>I acknowledge and agree to the Office Policies</span>
-      </label>
+      <div className="signature-section" style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'flex-start', marginTop: '1rem' }}>
+        <div style={{ flex: 2, minWidth: '300px' }}>
+          <span className="signature-label">Client Signature for Office Policies Acknowledgment</span>
+          <div className="signature-container" style={{ border: '1px solid rgba(28,43,76,0.2)', borderRadius: '8px', background: 'rgba(255,255,255,0.8)', height: '120px' }}>
+            <SignatureCanvas ref={officePoliciesSigPadRef} penColor="#1c2b4c" canvasProps={{ className: 'sigCanvas' }} onEnd={handleOfficePoliciesSignatureEnd} />
+          </div>
+          <button type="button" className="btn-clear" onClick={() => { officePoliciesSigPadRef.current.clear(); handleOfficePoliciesSignatureEnd(); }}>Clear</button>
+        </div>
+        
+        <div className="input-group" style={{ flex: 1, minWidth: '150px', marginTop: '1.5rem' }}>
+          <input type="date" name="officePoliciesSignatureDate" placeholder=" " value={formData.officePoliciesSignatureDate || ''} onChange={handleChange} required />
+          <label className="active-label">Date</label>
+        </div>
+      </div>
     </div>
 
     <div className="consent-box">
